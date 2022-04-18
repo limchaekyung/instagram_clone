@@ -12,7 +12,10 @@ function App() {
     // this is where the code runs
     db.collection('posts').onSnapshot(snapshot => {
       // every time a new post is added, this code firebase
-      setPosts(snapshot.docs.map(doc => doc.data()));
+      setPosts(snapshot.docs.map(doc => ({
+        id: doc.id,
+        post: doc.data()
+      })));
     });
   }, [])
 
@@ -25,12 +28,10 @@ function App() {
       <h1>Hello</h1>
 
       {
-        posts.map(post => (
-          <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+        posts.map(({ id, post }) => (
+          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
         ))
       }
-      <Post username="sssangha" caption="WOW" imageUrl="https://cdn.pixabay.com/photo/2021/12/26/08/32/lantern-6894507_960_720.jpg" />
-      <Post username="amaanath" caption="drama" imageUrl="https://cdn.pixabay.com/photo/2022/04/02/16/04/fox-7107267_960_720.jpg" />
     </div>
   );
 }
