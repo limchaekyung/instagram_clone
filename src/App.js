@@ -48,14 +48,14 @@ function App() {
         console.log(authUser);
         setUser(authUser);
 
-        if (authUser.displayName) {
-          // dont update username
-        } else {
-          // if we just created someone...
-          return authUser.updateProfile({
-            displayName: username,
-          })
-        }
+        // if (authUser.displayName) {
+        //   // dont update username
+        // } else {
+        //   // if we just created someone...
+        //   return authUser.updateProfile({
+        //     displayName: username,
+        //   })
+        // }
       } else {
         // user has logged out...
         setUsername(null);
@@ -69,7 +69,7 @@ function App() {
 
   useEffect(() => {
     // this is where the code runs
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       // every time a new post is added, this code firebase
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
@@ -104,7 +104,13 @@ function App() {
 
   return (
     <div className="app">
-      <ImageUpload />
+
+      {user?.displayName ? (
+        // <ImageUpload username={user.displayName} />
+        <h3>oh good</h3>
+      ) : (
+        <h3>Sorry you need to login to upload</h3>
+      )}
 
       <Modal
         open={open}
